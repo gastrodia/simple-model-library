@@ -1,0 +1,49 @@
+<header class="top" id="top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">人民大会堂三维会场布置平台</a>
+            <a class="scene-name"></a>
+        </div>
+
+
+
+        <div class="navbar-right">
+          <div id="login-wrp"
+
+           {{#if user}}
+              style="display:none"
+           {{/if}}
+
+          >
+            <form class ="navbar-form" method="POST">
+                <div class="form-group">
+                    <input type="text" placeholder="账户" name="id" class="form-control" id="username">
+                </div>
+                <div class="form-group">
+                    <input type="password" placeholder="密码" name="password" class="form-control" id="password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm" id="loginBtn" onclick="javascript:return false;">登陆</button>
+                <a class="btn btn-primary btn-sm" href="/user/reg" target="_blank">注册</a>
+                <a href="/user/forget" style="color: wheat;" target="_blank">忘记密码？</a>
+            </form>
+
+
+          </div>
+          <div id="login-after"
+
+          {{#if user}}
+            style="display:inline"
+          {{else}}
+            style="display:none"
+          {{/if}}
+
+          >
+            <span id="usernameText" style="">{{user.username}}</span>
+            <a class="btn btn-primary btn-sm" href="/scene/list" target="_blank">我的方案</a>
+            <a class="btn btn-primary btn-sm" id="logout">注销登录</a>
+
+          </div>
+        </div>
+
+    </div>
+</header>

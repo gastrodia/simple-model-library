@@ -1,0 +1,74 @@
+<!-- BEGIN SIDEBAR -->
+<div class="page-sidebar nav-collapse collapse">
+    <!-- BEGIN SIDEBAR MENU -->
+    <ul class="page-sidebar-menu">
+<!--        <li>
+            &lt;!&ndash; BEGIN SIDEBAR TOGGLER BUTTON &ndash;&gt;
+            <div class="sidebar-toggler hidden-phone"></div>
+            &lt;!&ndash; BEGIN SIDEBAR TOGGLER BUTTON &ndash;&gt;
+        </li>
+        <li>
+            &lt;!&ndash; BEGIN RESPONSIVE QUICK SEARCH FORM &ndash;&gt;
+            <form class="sidebar-search">
+                <div class="input-box">
+                    <a href="javascript:;" class="remove"></a>
+                    <input type="text" placeholder="Search...">
+                    <input type="button" class="submit" value=" ">
+                </div>
+            </form>
+            &lt;!&ndash; END RESPONSIVE QUICK SEARCH FORM &ndash;&gt;
+        </li>-->
+        <li class="start">
+            <a href="/scene/list">
+                <i class="icon-home"></i><span class="title">方案管理</span>
+              <span class="selected"></span>
+            </a>
+        </li>
+        <li>
+            <a href="/object/list"><i class="icon-th"></i><span class="title">模型管理</span></a>
+        </li>
+        <li class="">
+            <a href="/user/setting"><i class="icon-user"></i><span class="title">账号管理</span></a>
+        </li>
+        <li class="">
+            <a href="/logging/list"><i class="icon-file-text"></i><span class="title">操作日志</span></a>
+        </li>
+
+        <script>
+            require(['jquery'],function($){
+               var pathname = location.pathname;
+
+                function isHere(pathname,thisherf){
+                    if(!pathname || !thisherf){
+                        return false;
+                    }
+                    if(pathname.split('/')[1] == thisherf.split('/')[1]){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                };
+
+               $(function(){
+                  var lis = $(".page-sidebar-menu").find("li");
+                  lis.each(function(i){
+                          var li = $(lis[i]);
+                          var href = li.find("a").attr("href");
+
+                          if(isHere(pathname,href)){
+                              li.addClass("active");
+                          }else{
+                              li.removeClass("active");
+                          }
+
+                  });
+               }) ;
+
+
+            });
+        </script>
+
+    </ul>
+    <!-- END SIDEBAR MENU -->
+</div>
+<!-- END SIDEBAR -->

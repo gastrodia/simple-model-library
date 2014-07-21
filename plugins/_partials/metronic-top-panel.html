@@ -1,0 +1,65 @@
+<div class="container-fluid">
+
+    <!-- BEGIN LOGO -->
+
+    <a class="brand" href="#" style="margin-top: 1px;margin-left: -10px;width:280px;">
+
+        <span>人民大会堂三维会场布置平台</span>
+
+    </a>
+
+    <!-- END LOGO -->
+
+    <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+
+    <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+
+        <img src="/metronic/image/menu-toggler.png" alt=""/>
+
+    </a>
+
+    <!-- END RESPONSIVE MENU TOGGLER -->
+
+    <!-- BEGIN TOP NAVIGATION MENU -->
+
+    <ul class="nav pull-right">
+        <li class="dropdown user">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img alt="" src="/lib/metronic/image/avatar1_small.jpg">
+                <span class="username">
+                  {{#if user}}
+                    {{user.username}}
+                  {{/if}}
+
+                </span>
+                <i class="icon-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="/user/logout"><i class="icon-key"></i> 注销登录</a></li>
+
+            </ul>
+        </li>
+        <!-- END USER LOGIN DROPDOWN -->
+    </ul>
+
+    <!-- END TOP NAVIGATION MENU -->
+
+</div>
+
+<script>
+    require(["jquery","bootstrap"],function($,bootstrap){
+       $(function(){
+           $(".dropdown").click(function(){
+               var dropdownMenu = $(this).find(".dropdown-menu");
+               if(dropdownMenu.data("isVisible")){
+                   dropdownMenu.hide();
+                   dropdownMenu.data("isVisible",false);
+               }else{
+                   dropdownMenu.show();
+                   dropdownMenu.data("isVisible",true);
+               }
+           });
+       });
+
+    });
+</script>
