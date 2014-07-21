@@ -4,6 +4,6 @@
 
 
 //启动server
-var server = require('./server');
+var server = require('./core/server');
 server.init();
 

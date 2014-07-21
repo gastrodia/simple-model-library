@@ -5,6 +5,7 @@
 
 var Waterline = require("waterline");
 
+
 module.exports = Waterline.Collection.extend({
     tableName:'ob',
     adapter:'mysql',

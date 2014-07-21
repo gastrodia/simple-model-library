@@ -5,6 +5,7 @@
 var http = require('http');
 var express = require('express');
 var config = require('./config');
+var utils = require('./utils');
 
 var app = express();
 var log = require('./log');
@@ -14,7 +15,11 @@ app.set('port',process.env.PORT || config.PORT);
 
 var server = http.createServer(app);
 
+app.core = {};
+app.core.config = config;
+app.core.utils = utils;
 
+utils.registerPlugins(app);
 
 exports.init = function(){
     console.log('tbus init...., please wait!');
