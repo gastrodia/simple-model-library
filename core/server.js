@@ -3,12 +3,15 @@
  */
 
 var http = require('http');
+var path = require('path');
 var express = require('express');
+var hbs = require('hbs');
 var config = require('./config');
 var utils = require('./utils');
+var log = require('./log');
+var plugin = require('./plugin');
 
 var app = express();
-var log = require('./log');
 log.use(app);
 
 app.set('port',process.env.PORT || config.PORT);
@@ -18,8 +21,19 @@ var server = http.createServer(app);
 app.core = {};
 app.core.config = config;
 app.core.utils = utils;
+app.core.utils.registerPlugin = plugin.registerPlugin;
 
-utils.registerPlugins(app);
+//挂载www目录
+app.set('views',path.join(config.LPR, 'plugins/'));
+//hbs.registerHelper('helper_name', function(...) { ... });
+hbs.registerPartials(path.join(config.LPR, 'plugins/_partials'));
+//app.set('view engine', 'html');
+app.engine('html', hbs.__express);
+//静态文件
+app.use(express.static(path.join(config.LPR , 'public')));
+
+plugin.init(app);
+
 
 exports.init = function(){
     console.log('tbus init...., please wait!');
