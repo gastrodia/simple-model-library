@@ -62,6 +62,11 @@ var registerPlugin = function(app,pluginDir){
                     var api = require(path.join(root,"api"));
                     api(app);
                     break;
+                case "public":
+                    /*
+                    * TODO:每个插件都可以有自己的静态文件路径
+                    * */
+                    break;
             }
         }
     });

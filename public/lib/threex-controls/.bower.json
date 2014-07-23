@@ -1,0 +1,31 @@
+{
+  "name": "threex-controls",
+  "description": "fork from Three.js controls",
+  "keywords": [
+    "threejs",
+    "controls",
+    "three.js"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/gastrodia/threex-controls",
+  "authors": [
+    "ELatA <elata@foxmail.com>"
+  ],
+  "main": "controls/OrbitControls.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "17409a3e1f",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "17409a3e1f659677cb90c40f697323288eab2941"
+  },
+  "_source": "git://github.com/gastrodia/threex-controls.git",
+  "_target": "*",
+  "_originalSource": "threex-controls"
+}

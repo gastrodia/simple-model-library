@@ -1,0 +1,301 @@
+<div>
+<div class="title">
+    <a href="#" class="btn btn-warning " role="button" id="commentBtn">添加评论</a>
+</div>
+<div class="comment-writing" style="display: none">
+    <textarea id="commentTextArea"></textarea>
+    <div class="btn-group btn-group-xs ">
+        <a href="#" class="btn btn-primary btn-xs" role="button" id="submitCommentBtn">提交</a>
+    </div>
+</div>
+<ul class="comments">
+    {{#each comments}}
+    <li class="item" commentId="{{this.id}}">
+        <div class="comment-content" commentId="{{this.id}}">
+            <i class="glyphicon glyphicon-minus hide-reply-btn"></i>
+            <span class="person">{{this.username}}</span>: <br/>
+            <span class="text">{{this.content}}</span>&nbsp&nbsp
+            <span class="comment-btn-groups">
+               <!-- <a href="#" class="btn btn-warning btn-xs" role="button" >回复</a>-->
+
+                <i class="glyphicon glyphicon-pencil edit-comment-btn" id="editComment" title="编辑" style="display: none"  userId="{{this.user_id}}"></i>
+                <i class="glyphicon glyphicon-comment" id="replyBtn" title="回复"></i>
+                <i class="glyphicon glyphicon-remove delete-comment-btn" id="deleteComment" userId="{{this.user_id}}"  style="display: none" title="删除"></i>
+
+            </span>
+
+        </div>
+        <div class="reply-list">
+            {{#each this.replys}}
+            <div class="reply-content" replyId="{{this.id}}">
+                <span class="person">{{this.username}}</span>: <br/>
+                <span class="text">{{this.content}}</span>
+                <span class="reply-btn-groups">
+                     <i class="glyphicon glyphicon-pencil edit-reply-btn" id="editReply" title="编辑" style="display: none"  userId="{{this.user_id}}"></i>
+                     <i class="glyphicon glyphicon-remove delete-reply-btn"  id="deleteReply" style="display: none" userId="{{this.user_id}}" title="删除"></i>
+                </span>
+            </div>
+            {{/each}}
+            <div class="reply-writing" style="display: none">
+                <textarea id="replyTextArea"></textarea>
+                <div class="btn-group btn-group-xs ">
+                    <a href="#" class="btn btn-warning btn-xs submit-reply-btn" role="button" id="submitReplyBtn">提交</a>
+                </div>
+            </div>
+        </div>
+    </li>
+    {{/each}}
+
+</ul>
+
+
+    <style>
+        .comments .comment-content{
+            position: relative;
+            padding-right: 0px;
+        }
+        .comments .reply-content{
+            position: relative;
+            padding-right: 50px;
+        }
+
+
+        .comment-btn-groups{
+            position: absolute;
+            top: 0px;
+            right: 0px;
+        }
+        .reply-btn-groups{
+            position: absolute;
+            top: 0px;
+            right: 52px;
+        }
+    </style>
+
+
+    <script>
+        require(['jquery'],function($){
+            $(function(){
+                var commentWriting = $(".comment-writing");
+                $("#commentBtn").click(function(){
+                    if(commentWriting.data("isVisible")){
+                        commentWriting.hide();
+                        commentWriting.data("isVisible",false);
+                    }else{
+                        commentWriting.show();
+                        commentWriting.data("isVisible",true);
+                    }
+                });
+                $(".comments").find(".item").each(function(){
+                    var item = $(this);
+                    var replyBtn = item.find("#replyBtn");
+                    var replyWriting = item.find(".reply-writing");
+
+                    replyBtn.click(function(){
+                        if(replyWriting.data("isVisible")){
+                            replyWriting.hide();
+                            replyWriting.data("isVisible",false);
+                        }else{
+                            replyWriting.show();
+                            replyWriting.data("isVisible",true);
+                        }
+                    });
+
+
+                    var editBtn = item.find("#editComment");
+                    editBtn.click(function(){
+                        //commentWriting.show();
+                        var $this = $(this);
+                        var comment = $this.parent().parent();
+                        var commentId = comment.attr("commentId");
+                        var commentElement = comment.find(".text");
+                        if(comment.find(".comment-writing").length){
+                            commentElement.show();
+                            comment.find(".comment-writing").remove();
+                        }else{
+                            commentElement.hide();
+                            var commentText = commentElement.text();
+                            var editForm = commentWriting.clone();
+                            editForm.appendTo(comment);
+                            var commentTextArea = editForm.find("#commentTextArea");
+                            commentTextArea.val(commentText);
+                            editForm.find("#submitCommentBtn").click(function(){
+                                var content = commentTextArea.val();
+                                $.post("/api/comment/edit/" + commentId,{
+                                    content:content
+                                },function(data){
+                                    if(!data.ok){
+                                        alert(data);
+                                    }else{
+                                        window.refreshComments();
+                                    }
+                                })
+                            });
+                            editForm.show();
+                        }
+
+
+                    });
+
+                });
+
+
+
+                function openCommentWrite(){
+
+                }
+
+                function closeCommentWrite(){
+
+                }
+
+
+
+                $("#submitCommentBtn").click(function(){
+                    var commentTextArea = $(this).parents(".comment-writing").find("#commentTextArea")
+                    var content = commentTextArea.val();
+                    $.post("/api/comment/add/" + window.sceneId,{
+                        content:content
+                    },function(data){
+                        if(!data.ok){
+                            alert(data);
+                        }else{
+                            window.refreshComments();
+                        }
+                    })
+
+                });
+
+                $(".edit-reply-btn").click(function(){
+                    //commentWriting.show();
+                    var $this = $(this);
+                    var comment = $this.parent().parent();
+                    var commentId = comment.attr("replyId");
+                    var commentElement = comment.find(".text");
+                    if(comment.find(".comment-writing").length){
+                        commentElement.show();
+                        comment.find(".comment-writing").remove();
+                    }else{
+                        commentElement.hide();
+                        var commentText = commentElement.text();
+                        var editForm = commentWriting.clone();
+                        editForm.appendTo(comment);
+                        var commentTextArea = editForm.find("#commentTextArea");
+                        commentTextArea.val(commentText);
+                        editForm.find("#submitCommentBtn").click(function(){
+                            var content = commentTextArea.val();
+                            $.post("/api/comment/edit/" + commentId,{
+                                content:content
+                            },function(data){
+                                if(!data.ok){
+                                    alert(data);
+                                }else{
+                                    window.refreshComments();
+                                }
+                            })
+                        });
+                        editForm.show();
+                    }
+                });
+
+                $(".submit-reply-btn").click(function(){
+                    var item = $(this).parents(".item");
+                    var commentId = item.attr("commentId");
+                    var content = item.find("#replyTextArea").val();
+                    $.post("/api/comment/reply/" + commentId,{
+                        content:content
+                    },function(data){
+                        if(!data.ok){
+                            alert(data);
+                        }else{
+                            window.refreshComments();
+                        }
+                    })
+
+                });
+
+                $(".delete-comment-btn").click(function(){
+                    var item = $(this).parents(".item");
+                    var commentId = item.attr("commentId");
+                    console.log(commentId);
+                    $.ajax({
+                        url: '/api/comment/delete/' + commentId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if(response.ok){
+                                window.refreshComments();
+                            }else{
+                                console.log(response);
+                            }
+                        }
+                    });
+
+                });
+
+                $(".delete-reply-btn").click(function(){
+                    var reply = $(this).parents(".reply-content");
+                    var replyId = reply.attr("replyId");
+                    console.log(replyId);
+                    $.ajax({
+                        url: '/api/comment/delete/' + replyId,
+                        type: 'DELETE',
+                        success: function(response) {
+                            if(response.ok){
+                                window.refreshComments();
+                            }else{
+                                console.log(response);
+                            }
+                        }
+                    });
+                });
+
+
+                $(".hide-reply-btn").click(function(){
+                    var $this = $(this);
+                    var replys = $this.parent().next();
+                    if(replys.data("isHiding")){
+                        replys.show();
+                        replys.data("isHiding",false);
+                        $this.removeClass("glyphicon-plus").addClass("glyphicon-minus");
+                    }else{
+                        replys.hide();
+                        replys.data("isHiding",true);
+                        $this.removeClass("glyphicon-minus").addClass("glyphicon-plus");
+                    }
+                });
+
+                $.get("/api/user/status",function(user){
+                    $(".delete-comment-btn").each(function(){
+                        var btn = $(this);
+                        var userId = btn.attr("userId");
+                        if(userId == user.id){
+                            btn.show();
+                        }
+                    });
+                    $(".delete-reply-btn").each(function(){
+                        var btn = $(this);
+                        var userId = btn.attr("userId");
+                        if(userId == user.id){
+                            btn.show();
+                        }
+                    });
+                    $(".edit-comment-btn").each(function(){
+                        var btn = $(this);
+                        var userId = btn.attr("userId");
+                        if(userId == user.id){
+                            btn.show();
+                        }
+                    });
+                    $(".edit-reply-btn").each(function(){
+                        var btn = $(this);
+                        var userId = btn.attr("userId");
+                        if(userId == user.id){
+                            btn.show();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
+</div>

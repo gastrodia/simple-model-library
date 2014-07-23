@@ -23,7 +23,7 @@
                             <span class="icon-angle-right"></span>
                         </li>
                         <li>
-                            <a href="/object/list">模型管理</a>
+                            <a href="/ob/list">模型管理</a>
                             <span class="icon-angle-right"></span>
                         </li>
                         <li>
@@ -48,7 +48,7 @@
                             </div>
                         </div>
                         <div class="portlet-body form">
-                            <form class="form-horizontal" action="/api/object/upload"
+                            <form class="form-horizontal" action="/api/ob/upload"
                                     method="post" enctype="multipart/form-data" id="uploadForm">
 
                                 <div class="control-group">
@@ -181,7 +181,7 @@
                 $.ajax({
                     cache: true,
                     type: "POST",
-                    url: '/api/object/upload',//提交的URL
+                    url: '/api/ob/upload',//提交的URL
                     data: formData, // 要提交的表单,必须使用name属性
                     async: false,
 //                    cache: false,
@@ -192,7 +192,7 @@
                         if(continueUpload){
                             window.location.reload();
                         }else{*/
-                            window.location = location.origin + "/object/list";
+                            window.location = location.origin + "/ob/list";
                         //}
                     },
                     error: function (request) {

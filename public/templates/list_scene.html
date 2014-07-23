@@ -1,0 +1,89 @@
+
+
+{{#each client}}
+
+{{startWrap @index}}
+
+
+<div class="span3 btn">
+
+    <div class="scene-item">
+        <em>
+            <div class="pull-left">
+                <a href="/?sceneId={{this.id}}" class="" target="_blank" > <span>{{this.name}} </span>    </a>
+            </div>
+
+            <div class="pull-right">
+
+                <i class="icon-pencil edit-btn" scene_id="{{this.id}}"></i>
+                &nbsp
+                <i class="icon-remove delete-btn" scene_id="{{this.id}}"></i>
+            </div>
+
+            <div style="clear:both;"></div>
+        </em>
+
+
+        <br/>
+
+        <em>
+            <i class="icon-tags"></i> 方案作者：{{this.author}} &nbsp&nbsp&nbsp 单位（部门）：{{this.branch}}
+        </em>
+        <br/>
+        <em> <i class="icon-tags"></i> 施工方: {{this.implementer}}</em>
+        <br/>
+
+        <div style="font-size: 10px;">
+            <em>创建时间: {{formatTime this.createdAt}} &nbsp&nbsp&nbsp 更新时间: {{formatTime this.updatedAt}}</em>
+        </div>
+    </div>
+
+
+
+</div>
+
+{{endWrap @index}}
+
+{{/each}}
+
+
+<script>
+    require(['jquery'],function($){
+        $(function(){
+            $('html').find(".delete-btn").each(function(){
+
+                var deleteBtn = $(this);
+
+                deleteBtn.click(function(e){
+                    var sceneId = $(this).attr("scene_id");
+                    var item = deleteBtn.parents('.scene-item');
+                    var continueDelete = window.confirm("确定要删除此方案？");
+                    if(continueDelete){
+                        require(['jquery'],function($){
+                            $.ajax({
+                                url: '/api/scene/' + sceneId,
+                                type: 'DELETE',
+                                success: function(response) {
+                                    if(response.ok){
+                                        item.remove();
+                                    }else{
+                                        console.log(response);
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                });
+            });
+            $('html').find(".edit-btn").each(function(){
+                var editBtn = $(this);
+                editBtn.click(function(e){
+                    var sceneId = $(this).attr("scene_id");
+                    window.location = "/scene/edit?sceneId=" + sceneId;
+                });
+            });
+        })
+    });
+
+</script>

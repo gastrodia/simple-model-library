@@ -1,0 +1,70 @@
+
+
+{{#each client}}
+
+    {{startWrap @index}}
+
+
+        <div class="span3">
+            <div class="item ob-item">
+            <a class="fancybox-button" href="/ob/preview?id={{this.id}}" target="_blank">
+                <div class="zoom" style="height: 177px;">
+                    <img src="{{this.thumb_path}}" alt="Photo"/>
+                    <div class="zoom-icon"></div>
+                    <div class="carousel-caption">
+                                                    <span>
+                                                        <a href="">{{this.name}}</a>
+                                                    </span>
+
+                        <div class="pull-right">
+
+                            <a href="/ob/edit?objectId={{this.id}}" class="icon" target="_blank">
+                                <i class="icon-pencil"></i>
+                            </a>
+                            <a href="javascript:;" class="icon delete-btn" object_id="{{this.id}}">
+                                <i class="icon-remove"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </a>
+        </div>
+        </div>
+    {{endWrap @index}}
+
+{{/each}}
+
+
+<script>
+    require(['jquery'],function($){
+        $(function(){
+            $('html').find(".delete-btn").each(function(){
+                var deleteBtn = $(this);
+                deleteBtn.click(function(e){
+                    var object_id = $(this).attr("object_id");
+                    var item = deleteBtn.parents('.ob-item');
+                    var continueDelete = window.confirm("确定要删除此物体？（物体删除后所有场景中对此物体的引用都将失效！");
+                    if(continueDelete){
+                        require(['jquery'],function($){
+                            $.ajax({
+                                url: '/api/ob/' + object_id,
+                                type: 'DELETE',
+                                success: function(response) {
+
+                                    if(response.ok){
+                                        item.remove();
+                                    }else{
+                                        console.log(response);
+                                    }
+                                }
+                            });
+                        });
+                    }
+
+                })
+            })
+        })
+    });
+
+</script>

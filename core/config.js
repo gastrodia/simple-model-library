@@ -9,14 +9,19 @@ exports.PORT = 3221;
 //local project root
 exports.LPR = path.join(__dirname,"..");
 
-var mysqlAdapter = require('sails-mysql');
-mysqlAdapter.config = {
+exports.sessionKey = "simple-model-library";
+
+var mysqlConfig = {
     host: 'localhost',
     user: 'root',
     password: 'root',
     database: 'simple_model_library',
     charset  : 'utf8'
 };
+var mysqlAdapter = require('sails-mysql');
+mysqlAdapter.config = mysqlConfig;
+
+exports.mysqlConfig = mysqlConfig;
 
 exports.ormConfig = {
     adapters:{
@@ -26,3 +31,5 @@ exports.ormConfig = {
         migrate:'alert'
     }
 }
+
+exports.uploadPath = path.join(__dirname,"../public/uploads");
